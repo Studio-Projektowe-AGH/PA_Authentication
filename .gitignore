@@ -3,5 +3,11 @@ logs
 target
 tmp
 
-.DS_Store
+# Intelli J ignores
 .idea/*
+
+# Eclipse ignores
+.settings
+
+# OSX ignores
+.DS_Store
