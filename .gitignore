@@ -1,6 +1,7 @@
 # Play Framework ignores
 logs
-project/project
-project/target
 target
 tmp
+
+.DS_Store
+.idea/*
