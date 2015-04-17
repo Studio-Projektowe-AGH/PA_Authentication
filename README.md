@@ -13,9 +13,9 @@
 - [ ] Rejestracja użytkownika 
 - [ ] Logowanie użytkownika
 - [ ] Ustawienia profilu użytkownika
-- [ ] RESEARCH Bazy Danych
-- [ ] RESEARCH Web Framework
-- [ ] RESEARCH API
+- [x] RESEARCH Bazy Danych
+- [x] RESEARCH Web Framework
+- [x] RESEARCH API
 - [ ] Mockup danych użytkownika
 - [ ] Mockup danych biznesów
 - [ ] Projekty API
