@@ -1,5 +1,12 @@
+# Play Framework ignores
 logs
 project/project
 project/target
 target
 tmp
+
+# Openshift ignores
+.openshift
+
+#TEMP TRAVIS IGNORE
+.travis.yml
