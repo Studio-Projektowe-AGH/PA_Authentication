@@ -1,5 +1,4 @@
 # Studio Projektowe - Party Advisor
-======
 ### Travis CI [![Build Status](https://travis-ci.org/muggin/Party_Advisor.svg?branch=master)](https://travis-ci.org/muggin/Party_Advisor)
 ======
 ##### Sprint 1:
