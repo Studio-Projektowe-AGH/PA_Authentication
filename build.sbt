@@ -15,4 +15,8 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "org.mongodb.morphia" % "morphia" % "0.111"
 
-libraryDependencies += "org.mongodb" % "mongo-java-driver" % "3.0.0"
+libraryDependencies += "org.mongodb" % "mongo-java-driver" % "2.11.0"
+
+libraryDependencies += "org.codehaus.jackson" % "jackson-mapper-asl" % "1.5.0"
+
+fork in run := true
