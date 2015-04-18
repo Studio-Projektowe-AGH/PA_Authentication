@@ -11,9 +11,7 @@ import play.mvc.Results;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-/**
- * Created by Kris on 2015-04-18.
- */
+
 public class DBCommunication extends Controller {
     static MongoClientURI uri  = new MongoClientURI("mongodb://omega:omega@ds037601.mongolab.com:37601/goparty");
     static MongoClient client;

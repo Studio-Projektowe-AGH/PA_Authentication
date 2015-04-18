@@ -8,9 +8,7 @@ import org.mongodb.morphia.annotations.Id;
 
 import java.io.IOException;
 
-/**
- * Created by Kris on 2015-04-18.
- */
+
 @Entity
 public class BusinessUser {
 
@@ -18,6 +16,8 @@ public class BusinessUser {
     ObjectId id;
 
     String email;
+    String name;
+
 
     public BusinessUser(String email) {
         this.email = email;
