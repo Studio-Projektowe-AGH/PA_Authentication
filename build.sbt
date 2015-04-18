@@ -12,3 +12,7 @@ libraryDependencies ++= Seq(
   cache,
   javaWs
 )
+
+libraryDependencies += "org.mongodb.morphia" % "morphia" % "0.111"
+
+libraryDependencies += "org.mongodb" % "mongo-java-driver" % "3.0.0"
