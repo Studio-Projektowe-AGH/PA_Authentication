@@ -7,9 +7,15 @@ GET         /                       controllers.Application.index()
 
 POST        /auth/signup            controllers.businessSide.BusinessSideHandler.signUp()
 #tu ma przyjść pełny json: {"email":"bla@bla.com", "password":"jakiesTamHaslo", "name":"nazwaFiremki"}
+# odpowiedzi:
+# 200 OK on success
+# 400 Bad Request on failure - jeśli użytkownik istnieje
 
 POST        /auth/signin            controllers.businessSide.BusinessSideHandler.singIn()
 #tutaj ma przyjść json {"email":"bla@bla.com", "password":"jakiesTamHaslo"}
+# OK 200 on success
+# 401 Unauthorized on failure - złe hasło
+# 400 Bad Request - brak któregoś pola w jsonie
 
 #GET    /auth/signout
 
