@@ -1,6 +1,7 @@
 package controllers.businessSide;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.*;
 import org.mongodb.morphia.Morphia;
 import play.mvc.BodyParser;
@@ -12,7 +13,9 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 
-public class DBCommunication extends Controller {
+public class DBCommunication  {
+    static ObjectMapper mapper = new ObjectMapper();
+
     static MongoClientURI uri  = new MongoClientURI("mongodb://omega:omega@ds037601.mongolab.com:37601/goparty");
     static MongoClient client;
     static DB db;
@@ -29,32 +32,45 @@ public class DBCommunication extends Controller {
     static DBCollection businessUsersCollection = db.getCollection("businessUsers");
     static Morphia morphiaForBUser = new Morphia().map(BusinessUser.class);
 
-    @BodyParser.Of(BodyParser.Json.class)
-    public static Result addBUserToDB(){
-        JsonNode jsonInput = request().body().asJson();
-//        System.out.println("!!!!!\n\n@@@@@@");
-        System.out.println(jsonInput);
-        try {
-            BusinessUser newUser = BusinessUser.createBUser(jsonInput);
+    public static boolean addBUserToDB(BusinessUser newUser){
             DBObject bUserDbObj = morphiaForBUser.toDBObject(newUser);
-            businessUsersCollection.save(bUserDbObj);
-            return ok("New user added to db");
-        } catch (IOException e) {
-            return Results.badRequest("Wrong json format");
-        }
+        WriteResult ifSaved = businessUsersCollection.save(bUserDbObj);
+//        if(ifSaved.getN() != 1){
+//            System.out.println("Zapisano tyle dokumentow: "+ifSaved.getN());
+//            return false;
+//        }else{
+//            return true;
+//        }
+        return true;
     }
 
-    public static Result getUserFromDB(String email){
+    public static JsonNode getUserFromDB(String email){
         BasicDBObject searchQuerry = new BasicDBObject();
         searchQuerry.put("email", email);
 
         DBCursor results = businessUsersCollection.find(searchQuerry);
         if(results.hasNext()){
-            DBObject userInJson = results.next();
-
-            return ok(userInJson.toString());
+            DBObject userDBObject = results.next();
+            try {
+                JsonNode userInJson = mapper.readTree(userDBObject.toString());
+                return userInJson;
+            } catch (IOException e) {
+                return null;
+            }
         }else{
-            return notFound("No such user");
+            return null;
         }
     }
+
+    public static boolean existUser(String email) {
+        if (getUserFromDB(email) == null) {
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+
+
+
 }

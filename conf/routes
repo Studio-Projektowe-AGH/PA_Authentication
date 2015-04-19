@@ -3,11 +3,19 @@
 # ~~~~
 
 # Home page
-GET         /                          controllers.Application.index()
+GET         /                       controllers.Application.index()
 
-POST        /addNewBusinessUser        controllers.businessSide.DBCommunication.addBUserToDB()
-GET         /getBusinessUser            controllers.businessSide.DBCommunication.getUserFromDB(email)
+POST        /auth/signup            controllers.businessSide.BusinessSideHandler.signUp()
+#tu ma przyjść pełny json: {"email":"bla@bla.com", "password":"jakiesTamHaslo", "name":"nazwaFiremki"}
+
+POST        /auth/signin            controllers.businessSide.BusinessSideHandler.singIn()
+#tutaj ma przyjść json {"email":"bla@bla.com", "password":"jakiesTamHaslo"}
+
+#GET    /auth/signout
+
+GET         /getBusinessUser        controllers.businessSide.BusinessSideHandler.getUserFromDB(email)
+#tutaj ma przyjść po znaku zapytania parametr email
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file              controllers.Assets.at(path="/public", file)
+GET         /assets/*file           controllers.Assets.at(path="/public", file)
