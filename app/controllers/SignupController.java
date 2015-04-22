@@ -31,11 +31,11 @@ public class SignupController extends Controller {
 
             if (!dataService.exists(receivedCredentials)) {
                 dataService.save(receivedCredentials);
-                Logger.info("Signup Successful");
-                return ok("Signup Successful");
+                Logger.info("Signup Successful.");
+                return ok("Signup Successful.");
             } else {
-                Logger.info("Signup Failed");
-                return badRequest("Incorrect credentials");
+                Logger.info("Signup Failed.");
+                return badRequest("Incorrect credentials.");
             }
 
         } catch (IOException ioe) {

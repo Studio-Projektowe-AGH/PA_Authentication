@@ -32,8 +32,8 @@ public class SigninController extends Controller {
 
             if (storedCredentials != null) {
                 if (storedCredentials.getHashedPassword().compare(receivedCredentials.getPassword())) {
-                    Logger.debug("Signin Successful");
-                    return ok("Signin Successful");
+                    Logger.debug("Signin Successful.");
+                    return ok("Signin Successful.");
                 } else {
                     Logger.debug("Signin Failed - Password mismatch.");
                     return unauthorized();

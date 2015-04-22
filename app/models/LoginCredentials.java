@@ -34,19 +34,6 @@ public class LoginCredentials {
 
     public LoginCredentials() {}
 
-//    public LoginCredentials(String email, String password) {
-//        this.email = email;
-//        this.password = password;
-//    }
-//
-//    public LoginCredentials(String email, Password password) {
-//        this(email, password, false);
-//    }
-//
-//    public LoginCredentials(String email, Password password, Boolean activated) {
-//        this(email, password, activated, new ArrayList<>());
-//    }
-
     public LoginCredentials(String email, Password hashedPassword, Boolean disabled, List<SocialCredentials> socialCredentials) {
         this.email = email;
         this.hashedPassword = hashedPassword;
@@ -87,11 +74,6 @@ public class LoginCredentials {
         public Password(String password) {
             this.salt = generateSalt();
             this.hash = encrypt(password, salt);
-        }
-
-        public Password(String hash, String salt) {
-            this.hash = hash;
-            this.salt = salt;
         }
 
         public Boolean compare(String otherPassword) {
