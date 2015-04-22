@@ -3,25 +3,15 @@
 # ~~~~
 
 # Home page
-GET         /                       controllers.Application.index()
+GET         /                           controllers.Application.index()
 
-POST        /auth/signup            controllers.businessSide.BusinessSideHandler.signUp()
-#tu ma przyjść pełny json: {"email":"bla@bla.com", "password":"jakiesTamHaslo", "name":"nazwaFiremki"}
-# odpowiedzi:
-# 200 OK on success
-# 400 Bad Request on failure - jeśli użytkownik istnieje
+POST        /auth/signup                controllers.SignupController.handleSignup()
 
-POST        /auth/signin            controllers.businessSide.BusinessSideHandler.singIn()
-#tutaj ma przyjść json {"email":"bla@bla.com", "password":"jakiesTamHaslo"}
-# OK 200 on success
-# 401 Unauthorized on failure - złe hasło
-# 400 Bad Request - brak któregoś pola w jsonie
+POST        /auth/signin/credentials    controllers.SigninController.handleCredentialSignin()
+
+POST        /auth/signin/:provider      controllers.SigninController.handleProviderSignin(provider)
 
 #GET    /auth/signout
 
-GET         /getBusinessUser        controllers.businessSide.BusinessSideHandler.getUserFromDB(email)
-#tutaj ma przyjść po znaku zapytania parametr email
-
-
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file           controllers.Assets.at(path="/public", file)
+GET         /assets/*file               controllers.Assets.at(path="/public", file)

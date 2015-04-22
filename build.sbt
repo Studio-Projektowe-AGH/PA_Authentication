@@ -19,8 +19,8 @@ libraryDependencies += "org.mongodb" % "mongo-java-driver" % "2.11.0"
 
 libraryDependencies += "org.codehaus.jackson" % "jackson-mapper-asl" % "1.5.0"
 
+libraryDependencies += "com.google.inject" % "guice" % "4.0-beta"
+
 libraryDependencies += "commons-codec" % "commons-codec" % "1.9"
 
-fork in run := true
-
-fork in run := true
+libraryDependencies += "com.google.guava" % "guava" % "12.0"
