@@ -24,3 +24,5 @@ libraryDependencies += "com.google.inject" % "guice" % "4.0-beta"
 libraryDependencies += "commons-codec" % "commons-codec" % "1.9"
 
 libraryDependencies += "com.google.guava" % "guava" % "12.0"
+
+libraryDependencies += "com.nimbusds" % "nimbus-jose-jwt" % "2.22.1"
