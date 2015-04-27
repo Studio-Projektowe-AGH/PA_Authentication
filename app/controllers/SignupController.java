@@ -31,6 +31,7 @@ public class SignupController extends Controller {
 
             if (!dataService.exists(receivedCredentials)) {
                 dataService.save(receivedCredentials);
+                // TODO: Generate and return access token with authentication service.
                 Logger.info("Signup Successful.");
                 return ok("Signup Successful.");
             } else {

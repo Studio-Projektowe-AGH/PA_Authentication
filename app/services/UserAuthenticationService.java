@@ -1,87 +1,58 @@
 package services;
 
+import com.google.inject.Inject;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
+import models.LoginCredentials;
+import org.bson.types.ObjectId;
+import play.Play;
 
 import java.text.ParseException;
 
 /**
  * Created by Wojtek on 22/04/15.
  */
-public class UserAuthenticationService {
-    public static void main(final String[] args) {
+public class UserAuthenticationService implements BasicAuthenticationService {
 
-        // Create payload
-        String message = "Hello world!";
+    final static private String secret;
 
-        Payload payload = new Payload(message);
+    @Inject
+    static BasicDataService<LoginCredentials, ObjectId> dataService;
 
-        System.out.println("JWS payload message: " + message);
+    static {
+        secret = Play.application().configuration().getString("jwt.secret");
+    }
 
-        // Create JWS header with HS256 algorithm
+    public Boolean verifyCredentials(LoginCredentials receivedCredentials) {
+        LoginCredentials storedCredentials = dataService.findOneByEmail(receivedCredentials.getEmail());
+        if (storedCredentials != null && storedCredentials.getHashedPassword().compare(receivedCredentials.getPassword())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean verifyToken(String jwtToken) throws ParseException, JOSEException {
+        JWSObject jwsObject = JWSObject.parse(jwtToken);
+        JWSVerifier verifier = new MACVerifier(secret.getBytes());
+        return jwsObject.verify(verifier);
+    }
+
+    public String getTokenPayload(String jwtToken) throws ParseException {
+        JWSObject jwsObject = JWSObject.parse(jwtToken);
+        return jwsObject.getPayload().toString();
+    }
+
+    public String generateToken(LoginCredentials loginCredentials) throws JOSEException {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         header.setContentType("text/plain");
 
-        System.out.println("JWS header: " + header.toJSONObject());
-
-        // Create JWS object
+        Payload payload = new Payload(loginCredentials.getEmail());
         JWSObject jwsObject = new JWSObject(header, payload);
+        JWSSigner signer = new MACSigner(secret.getBytes());
+        jwsObject.sign(signer);
 
-        // Create HMAC signer
-        String sharedKey = "a0a2abd8-6162-41c3-83d6-1cf559b46afc";
-
-        System.out.println("HMAC key: " + sharedKey);
-
-        JWSSigner signer = new MACSigner(sharedKey.getBytes());
-
-        try {
-            jwsObject.sign(signer);
-        }
-        catch (JOSEException e) {
-
-            System.err.println("Couldn't sign JWS object: " + e.getMessage());
-            return;
-        }
-
-        // Serialise JWS object to compact format
-        String s = jwsObject.serialize();
-
-        System.out.println("Serialised JWS object: " + s);
-
-        // Parse back and check signature
-
-        try {
-            jwsObject = JWSObject.parse(s);
-        }
-        catch (ParseException e) {
-
-            System.err.println("Couldn't parse JWS object: " + e.getMessage());
-            return;
-        }
-
-        System.out.println("JWS object successfully parsed");
-
-        JWSVerifier verifier = new MACVerifier(sharedKey.getBytes());
-
-        boolean verifiedSignature = false;
-
-        try {
-            verifiedSignature = jwsObject.verify(verifier);
-        }
-        catch (JOSEException e) {
-
-            System.err.println("Couldn't verify signature: " + e.getMessage());
-        }
-
-        if (verifiedSignature) {
-            System.out.println("Verified JWS signature!");
-        }
-        else {
-            System.out.println("Bad JWS signature!");
-            return;
-        }
-
-        System.out.println("Recovered payload message: " + jwsObject.getPayload());
+        return jwsObject.serialize();
     }
 }
