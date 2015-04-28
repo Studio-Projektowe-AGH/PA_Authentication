@@ -24,6 +24,7 @@ public class LoginCredentials {
     private String password;
     @Embedded
     private Password hashedPassword;
+    private UserRole role;
     private Date creationTime;
     private Date lastAccessTime;
     private Boolean disabled;
@@ -34,11 +35,12 @@ public class LoginCredentials {
 
     public LoginCredentials() {}
 
-    public LoginCredentials(String email, Password hashedPassword, Boolean disabled, List<SocialCredentials> socialCredentials) {
+    public LoginCredentials(String email, Password hashedPassword, UserRole role, List<SocialCredentials> socialCredentials) {
         this.email = email;
         this.hashedPassword = hashedPassword;
-        this.disabled = disabled;
+        this.role = role;
         this.socialCredentials = socialCredentials;
+        this.disabled = false;
     }
 
     public void addSocialCredential(SocialCredentials sc) {
@@ -92,16 +94,21 @@ public class LoginCredentials {
         }
     }
 
+    public enum UserRole {
+        admin, individual, business
+    }
+
+
     public String getEmail() {
         return email;
     }
-
     public Password getHashedPassword() {
         return hashedPassword;
     }
     public String getPassword() {
         return password;
     }
+    public UserRole getRole() {return role; }
 
     @Override
     public String toString() {

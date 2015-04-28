@@ -45,14 +45,16 @@ public class SigninController extends Controller {
                 Logger.debug("Signin Successful. Token: " + jwtToken);
                 return ok(response);
             } else {
-                Logger.debug("Signin Failed.");
+                Logger.debug("Signin Failed. Unauthorized.");
                 return unauthorized();
             }
         } catch (IOException ioe) {
            ioe.printStackTrace();
+            Logger.debug("Signin Failed. Invalid JSON format.");
            return badRequest("Invalid JSON format.");
         } catch (JOSEException e) {
             e.printStackTrace();
+            Logger.debug("Signin Failed. Error while generating token.");
             return internalServerError("Error while generating token.");
         }
     }
