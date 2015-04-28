@@ -35,9 +35,9 @@ public class LoginCredentials {
 
     public LoginCredentials() {}
 
-    public LoginCredentials(String email, Password hashedPassword, UserRole role, List<SocialCredentials> socialCredentials) {
+    public LoginCredentials(String email, String password, UserRole role, List<SocialCredentials> socialCredentials) {
         this.email = email;
-        this.hashedPassword = hashedPassword;
+        this.hashedPassword = new Password(password);
         this.role = role;
         this.socialCredentials = socialCredentials;
         this.disabled = false;
@@ -61,7 +61,7 @@ public class LoginCredentials {
         }
     }
 
-    @PostPersist
+    @PrePersist
     private void lowerEmail() {
         this.email = email.toLowerCase();
     }

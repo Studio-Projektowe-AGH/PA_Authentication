@@ -1,17 +1,15 @@
 package services;
 
 import com.nimbusds.jose.JOSEException;
-import models.LoginCredentials;
 
 import java.text.ParseException;
 
 /**
  * Created by Wojtek on 22/04/15.
  */
-public interface BasicAuthenticationService {
+public interface BasicAuthenticationService<T> {
 
-    Boolean verifyCredentials(LoginCredentials loginCredentials);
+    Boolean verifyCredentials(T credentials);
     Boolean verifyToken(String jwtToken) throws ParseException, JOSEException;
-    String generateToken(LoginCredentials loginCredentials) throws JOSEException;
-
+    String generateToken(T loginCredentials) throws JOSEException;
 }

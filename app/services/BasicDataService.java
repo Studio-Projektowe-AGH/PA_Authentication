@@ -10,10 +10,7 @@ import java.util.List;
 public interface BasicDataService<T, K> extends DAO<T, K> {
 
     boolean exists(T element);
-
-    List<T> findByEmail(String email);
-
-    T findOneByEmail(String email);
-
+    List<T> findByCredentials(T element);
+    T findOneByCredentials(T element);
     void updateLastAccessTime();
 }

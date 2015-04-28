@@ -26,3 +26,5 @@ libraryDependencies += "commons-codec" % "commons-codec" % "1.9"
 libraryDependencies += "com.google.guava" % "guava" % "12.0"
 
 libraryDependencies += "com.nimbusds" % "nimbus-jose-jwt" % "2.22.1"
+
+libraryDependencies += "com.restfb" % "restfb" % "1.10.1"

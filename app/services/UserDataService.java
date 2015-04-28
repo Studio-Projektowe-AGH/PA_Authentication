@@ -25,23 +25,23 @@ public class UserDataService extends BasicDAO<LoginCredentials, ObjectId> implem
     @Override
     public boolean exists(LoginCredentials loginCredentials) {
         Query<LoginCredentials> query = createQuery().field("email").equal(loginCredentials.getEmail().toLowerCase());
-        Logger.debug(query.toString());
+        Logger.debug("Exists: " + query.toString());
 
         return exists(query);
     }
 
     @Override
-    public List<LoginCredentials> findByEmail(String email) {
-        Query<LoginCredentials> query = createQuery().field("email").equal(email);
-        Logger.debug(query.toString());
+    public List<LoginCredentials> findByCredentials(LoginCredentials credentials) {
+        Query<LoginCredentials> query = createQuery().field("email").equal(credentials.getEmail().toLowerCase());
+        Logger.debug("Find By Credentials: " + query.toString());
 
         return find(query).asList();
     }
 
     @Override
-    public LoginCredentials findOneByEmail(String email) {
-        Query<LoginCredentials> query = createQuery().field("email").equal(email);
-        Logger.debug(query.toString());
+    public LoginCredentials findOneByCredentials(LoginCredentials credentials) {
+        Query<LoginCredentials> query = createQuery().field("email").equal(credentials.getEmail().toLowerCase());
+        Logger.debug("Find One By Credentials: " + query.toString());
 
         return findOne(query);
     }

@@ -12,8 +12,8 @@ import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.BasicAuthenticationService;
 import services.BasicDataService;
-import services.UserAuthenticationService;
 
 import java.io.IOException;
 
@@ -26,11 +26,10 @@ public class SignupController extends Controller {
     static BasicDataService<LoginCredentials, ObjectId> dataService;
 
     @Inject
-    static UserAuthenticationService authenticationService;
+    static BasicAuthenticationService<LoginCredentials> authenticationService;
 
     @BodyParser.Of(BodyParser.Json.class)
     public static Result handleSignup() {
-
         try {
             JsonNode jsonBody = request().body().asJson();
             ObjectMapper mapper = new ObjectMapper();
@@ -40,7 +39,6 @@ public class SignupController extends Controller {
                 dataService.save(receivedCredentials);
                 ObjectNode response = Json.newObject();
                 String jwtToken = authenticationService.generateToken(receivedCredentials);
-
 
                 response.put("access_token", jwtToken);
                 Logger.debug("Signup Successful. Token " + jwtToken);
