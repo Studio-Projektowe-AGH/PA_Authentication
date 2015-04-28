@@ -1,25 +1,32 @@
-package services;
+package services.authentication;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
+import com.restfb.FacebookClient;
 import models.LoginCredentials;
+import models.SocialCredentials;
 import org.bson.types.ObjectId;
 import play.Play;
 import play.libs.Json;
+import services.FacebookConnector;
+import services.data.BasicDataService;
 
+import javax.inject.Named;
 import java.text.ParseException;
 
 /**
- * Created by Wojtek on 22/04/15.
+ * Created by Wojtek on 28/04/15.
  */
-public class UserAuthenticationService implements BasicAuthenticationService<LoginCredentials> {
+public class FacebookAuthenticationService implements BasicAuthenticationService<SocialCredentials> {
 
     final static private String secret;
+    static FacebookConnector facebookConnector = new FacebookConnector();
 
     @Inject
+    @Named("SocialDataService")
     static BasicDataService<LoginCredentials, ObjectId> dataService;
 
     static {
@@ -27,13 +34,11 @@ public class UserAuthenticationService implements BasicAuthenticationService<Log
     }
 
     @Override
-    public Boolean verifyCredentials(LoginCredentials receivedCredentials) {
-        LoginCredentials storedCredentials = dataService.findOneByCredentials(receivedCredentials);
-        if (storedCredentials != null && storedCredentials.getHashedPassword().compare(receivedCredentials.getPassword())) {
-            return true;
-        } else {
-            return false;
-        }
+    public Boolean verifyCredentials(SocialCredentials socialCredentials) {
+        FacebookClient.DebugTokenInfo dti = facebookConnector.facebookClient.debugToken(socialCredentials.getAccessToken());
+        socialCredentials.setAccountId(dti.getUserId());
+        socialCredentials.setExpiresOn(dti.getExpiresAt());
+        return dti.isValid();
     }
 
     @Override
@@ -44,8 +49,8 @@ public class UserAuthenticationService implements BasicAuthenticationService<Log
     }
 
     @Override
-    public String generateToken(LoginCredentials loginCredentials) throws JOSEException {
-        LoginCredentials storedCredentials = dataService.findOneByCredentials(loginCredentials);
+    public String generateToken(SocialCredentials loginCredentials) throws JOSEException {
+        LoginCredentials storedCredentials = dataService.findOneByCredentials(new LoginCredentials(loginCredentials));
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         header.setContentType("text/plain");
 

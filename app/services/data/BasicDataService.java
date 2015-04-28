@@ -1,4 +1,4 @@
-package services;
+package services.data;
 
 import org.mongodb.morphia.dao.DAO;
 

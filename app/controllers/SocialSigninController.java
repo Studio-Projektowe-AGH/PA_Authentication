@@ -6,51 +6,62 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import com.nimbusds.jose.JOSEException;
 import models.LoginCredentials;
+import models.SocialCredentials;
 import org.bson.types.ObjectId;
 import play.Logger;
 import play.libs.Json;
-import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.FacebookConnector;
 import services.authentication.BasicAuthenticationService;
 import services.data.BasicDataService;
 
+import javax.inject.Named;
 import java.io.IOException;
 
 /**
  * Created by Wojtek on 20/04/15.
  */
-public class SigninController extends Controller {
+public class SocialSigninController extends Controller {
 
     @Inject
+    @Named("SocialDataService")
     static BasicDataService<LoginCredentials, ObjectId> dataService;
 
     @Inject
     static BasicAuthenticationService<LoginCredentials> loginAuthenticationService;
 
-    @BodyParser.Of(BodyParser.Json.class)
-    public static Result handleCredentialSignin() {
+    @Inject
+    static BasicAuthenticationService<SocialCredentials> socialAuthenticationService;
+
+    static FacebookConnector facebookConnector = new FacebookConnector();
+
+    public static Result handleProviderSignin(String provider) {
         try {
             JsonNode jsonBody = request().body().asJson();
             ObjectMapper mapper = new ObjectMapper();
-            LoginCredentials receivedCredentials = mapper.readValue(jsonBody.toString(), LoginCredentials.class);
-            System.out.println("I'm here");
-            if (loginAuthenticationService.verifyCredentials(receivedCredentials)) {
+            SocialCredentials receivedCredentials = mapper.readValue(jsonBody.toString(), SocialCredentials.class);
+
+            if (socialAuthenticationService.verifyCredentials(receivedCredentials)) {
+                if (!dataService.exists(new LoginCredentials(receivedCredentials))) {
+                    LoginCredentials loginCredentials = facebookConnector.generateLoginCredentials(receivedCredentials);
+                    dataService.save(loginCredentials);
+                }
+
                 ObjectNode response = Json.newObject();
-                String jwtToken = loginAuthenticationService.generateToken(receivedCredentials);
+                String jwtToken = socialAuthenticationService.generateToken(receivedCredentials);
                 response.put("access_token", jwtToken);
 
                 dataService.updateLastAccessTime();
                 Logger.debug("Signin Successful. Token: " + jwtToken);
                 return ok(response);
             } else {
-                Logger.debug("Signin Failed. Unauthorized.");
-                return unauthorized();
+                return badRequest("Bad request.");
             }
         } catch (IOException ioe) {
-           ioe.printStackTrace();
+            ioe.printStackTrace();
             Logger.error("Signin Failed. Invalid JSON format.");
-           return badRequest("Invalid JSON format.");
+            return badRequest("Invalid JSON format.");
         } catch (JOSEException e) {
             e.printStackTrace();
             Logger.error("Error while generating token.");

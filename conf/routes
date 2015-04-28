@@ -9,7 +9,7 @@ POST        /auth/signup                controllers.SignupController.handleSignu
 
 POST        /auth/signin/credentials    controllers.SigninController.handleCredentialSignin()
 
-POST        /auth/signin/:provider      controllers.SigninController.handleProviderSignin(provider)
+POST        /auth/signin/:provider      controllers.SocialSigninController.handleProviderSignin(provider)
 
 #GET    /auth/signout
 

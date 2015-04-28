@@ -12,8 +12,8 @@ import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
-import services.BasicAuthenticationService;
-import services.BasicDataService;
+import services.authentication.BasicAuthenticationService;
+import services.data.BasicDataService;
 
 import java.io.IOException;
 

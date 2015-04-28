@@ -1,4 +1,4 @@
-package services;
+package services.authentication;
 
 import com.nimbusds.jose.JOSEException;
 

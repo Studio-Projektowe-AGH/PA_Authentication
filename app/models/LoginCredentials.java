@@ -7,6 +7,7 @@ import org.mongodb.morphia.annotations.*;
 
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,12 @@ public class LoginCredentials {
     private Long v;
 
     public LoginCredentials() {}
+
+    public LoginCredentials(SocialCredentials socialCredentials) {
+        this.email = "";
+        this.hashedPassword = new Password("");
+        this.socialCredentials = Arrays.asList(socialCredentials);
+    }
 
     public LoginCredentials(String email, String password, UserRole role, List<SocialCredentials> socialCredentials) {
         this.email = email;
@@ -114,6 +121,7 @@ public class LoginCredentials {
         return password;
     }
     public UserRole getRole() {return role; }
+    public List<SocialCredentials> getSocialCredentials() { return socialCredentials; }
 
     @Override
     public String toString() {
