@@ -17,9 +17,10 @@
 - [x] RESEARCH Web Framework
 - [x] RESEARCH API
 - [ ] ~~Mockup danych użytkownika~~ moved: **Sprint 3 :exclamation:**
-- [ ] ~~Mockup danych biznesów~~ **moved: Sprint 3 :exclamation:**
+- [ ] ~~Mockup danych biznesów~~ moved: **Sprint 3 :exclamation:**
 - [ ] ~~Projekty API~~
 - [ ] ~~Implementacja API~~
+
 Podsumowanie **Sprint 1**: :rage:
 
 ##### Sprint 2:
