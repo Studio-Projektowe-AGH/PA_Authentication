@@ -37,13 +37,14 @@ public class SignupController extends Controller {
             LoginCredentials receivedCredentials = mapper.readValue(jsonBody.toString(), LoginCredentials.class);
 
             if (!dataService.exists(receivedCredentials)) {
+                dataService.save(receivedCredentials);
                 ObjectNode response = Json.newObject();
                 String jwtToken = authenticationService.generateToken(receivedCredentials);
 
-                dataService.save(receivedCredentials);
+
                 response.put("access_token", jwtToken);
-                Logger.debug("Signup Successful.");
-                return ok("Signup Successful.");
+                Logger.debug("Signup Successful. Token " + jwtToken);
+                return ok(response);
             } else {
                 Logger.debug("Signup Failed. User already exists.");
                 return badRequest("User already exists.");

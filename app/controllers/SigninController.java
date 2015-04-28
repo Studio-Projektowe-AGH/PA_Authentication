@@ -37,8 +37,10 @@ public class SigninController extends Controller {
             LoginCredentials receivedCredentials = mapper.readValue(jsonBody.toString(), LoginCredentials.class);
 
             if (authenticationService.verifyCredentials(receivedCredentials)) {
+                LoginCredentials storedCredentials = dataService.findOneByEmail(receivedCredentials.getEmail());
+
                 ObjectNode response = Json.newObject();
-                String jwtToken = authenticationService.generateToken(receivedCredentials);
+                String jwtToken = authenticationService.generateToken(storedCredentials);
                 response.put("access_token", jwtToken);
 
                 dataService.updateLastAccessTime();
@@ -50,11 +52,11 @@ public class SigninController extends Controller {
             }
         } catch (IOException ioe) {
            ioe.printStackTrace();
-            Logger.debug("Signin Failed. Invalid JSON format.");
+            Logger.error("Signin Failed. Invalid JSON format.");
            return badRequest("Invalid JSON format.");
         } catch (JOSEException e) {
             e.printStackTrace();
-            Logger.debug("Signin Failed. Error while generating token.");
+            Logger.error("Signin Failed. Error while generating token.");
             return internalServerError("Error while generating token.");
         }
     }

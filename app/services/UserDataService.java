@@ -24,7 +24,7 @@ public class UserDataService extends BasicDAO<LoginCredentials, ObjectId> implem
 
     @Override
     public boolean exists(LoginCredentials loginCredentials) {
-        Query<LoginCredentials> query = createQuery().field("email").equal(loginCredentials.getEmail());
+        Query<LoginCredentials> query = createQuery().field("email").equal(loginCredentials.getEmail().toLowerCase());
         Logger.debug(query.toString());
 
         return exists(query);

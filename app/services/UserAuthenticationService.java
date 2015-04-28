@@ -1,12 +1,16 @@
 package services;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import models.LoginCredentials;
+import net.minidev.json.JSONObject;
 import org.bson.types.ObjectId;
 import play.Play;
+import play.api.libs.json.JsPath;
+import play.libs.Json;
 
 import java.text.ParseException;
 
@@ -48,7 +52,11 @@ public class UserAuthenticationService implements BasicAuthenticationService {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
         header.setContentType("text/plain");
 
-        Payload payload = new Payload(loginCredentials.getEmail());
+        ObjectNode payloadObject = Json.newObject();
+        payloadObject.put("userId", loginCredentials.getUserId());
+        payloadObject.put("userRole", loginCredentials.getRole().toString());
+
+        Payload payload = new Payload(payloadObject.toString());
         JWSObject jwsObject = new JWSObject(header, payload);
         JWSSigner signer = new MACSigner(secret.getBytes());
         jwsObject.sign(signer);

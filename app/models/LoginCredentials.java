@@ -61,6 +61,11 @@ public class LoginCredentials {
         }
     }
 
+    @PostPersist
+    private void lowerEmail() {
+        this.email = email.toLowerCase();
+    }
+
     @PrePersist
     public void updateLastAccesTime() {
         this.lastAccessTime = new Date();
@@ -98,7 +103,7 @@ public class LoginCredentials {
         admin, individual, business
     }
 
-
+    public String getUserId() { return id.toString(); }
     public String getEmail() {
         return email;
     }
