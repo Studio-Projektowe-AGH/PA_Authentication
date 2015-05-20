@@ -1,7 +1,8 @@
-# Studio Projektowe - Party Advisor
-### Travis CI [![Build Status](https://travis-ci.org/muggin/Party_Advisor.svg?branch=master)](https://travis-ci.org/muggin/Party_Advisor)
+# Studio Projektowe - Party Advisor - Authentication Service
+### Travis CI - [![Build Status](https://travis-ci.org/Studio-Projektowe-AGH/PA_Authentication.svg)](https://travis-ci.org/Studio-Projektowe-AGH/PA_Authentication)
 ======
 
+REST API: 
 POST        /auth/signup
 
 POST        /auth/signin/credentials
