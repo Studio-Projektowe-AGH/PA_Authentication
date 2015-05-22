@@ -3,6 +3,7 @@ package config;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
+import controllers.Application;
 import controllers.SigninController;
 import controllers.SignupController;
 import controllers.SocialSigninController;
@@ -31,6 +32,7 @@ public class GuiceConfig  extends AbstractModule {
 
         requestStaticInjection(UserAuthenticationService.class);
         requestStaticInjection(FacebookAuthenticationService.class);
+        requestStaticInjection(Application.class);
         requestStaticInjection(SigninController.class);
         requestStaticInjection(SignupController.class);
         requestStaticInjection(SocialSigninController.class);

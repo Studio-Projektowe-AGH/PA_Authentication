@@ -29,10 +29,7 @@ public class SocialSigninController extends Controller {
     static BasicDataService<LoginCredentials, ObjectId> dataService;
 
     @Inject
-    static BasicAuthenticationService<LoginCredentials> loginAuthenticationService;
-
-    @Inject
-    static BasicAuthenticationService<SocialCredentials> socialAuthenticationService;
+    static BasicAuthenticationService<SocialCredentials> authenticationService;
 
     static FacebookConnector facebookConnector = new FacebookConnector();
 
@@ -42,14 +39,14 @@ public class SocialSigninController extends Controller {
             ObjectMapper mapper = new ObjectMapper();
             SocialCredentials receivedCredentials = mapper.readValue(jsonBody.toString(), SocialCredentials.class);
 
-            if (socialAuthenticationService.verifyCredentials(receivedCredentials)) {
+            if (authenticationService.verifyCredentials(receivedCredentials)) {
                 if (!dataService.exists(new LoginCredentials(receivedCredentials))) {
                     LoginCredentials loginCredentials = facebookConnector.generateLoginCredentials(receivedCredentials);
                     dataService.save(loginCredentials);
                 }
 
                 ObjectNode response = Json.newObject();
-                String jwtToken = socialAuthenticationService.generateToken(receivedCredentials);
+                String jwtToken = authenticationService.generateToken(receivedCredentials);
                 response.put("access_token", jwtToken);
 
                 dataService.updateLastAccessTime();

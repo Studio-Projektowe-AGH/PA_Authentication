@@ -26,7 +26,7 @@ public class SigninController extends Controller {
     static BasicDataService<LoginCredentials, ObjectId> dataService;
 
     @Inject
-    static BasicAuthenticationService<LoginCredentials> loginAuthenticationService;
+    static BasicAuthenticationService<LoginCredentials> authenticationService;
 
     @BodyParser.Of(BodyParser.Json.class)
     public static Result handleCredentialSignin() {
@@ -34,10 +34,9 @@ public class SigninController extends Controller {
             JsonNode jsonBody = request().body().asJson();
             ObjectMapper mapper = new ObjectMapper();
             LoginCredentials receivedCredentials = mapper.readValue(jsonBody.toString(), LoginCredentials.class);
-            System.out.println("I'm here");
-            if (loginAuthenticationService.verifyCredentials(receivedCredentials)) {
+            if (authenticationService.verifyCredentials(receivedCredentials)) {
                 ObjectNode response = Json.newObject();
-                String jwtToken = loginAuthenticationService.generateToken(receivedCredentials);
+                String jwtToken = authenticationService.generateToken(receivedCredentials);
                 response.put("access_token", jwtToken);
 
                 dataService.updateLastAccessTime();
