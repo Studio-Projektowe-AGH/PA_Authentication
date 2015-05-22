@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class BusinessUserTest extends TestCase {
+public class BusinessUserTest {
 
     @Test
     public void createBUserTest(){
