@@ -8,3 +8,5 @@ POST        /auth/signup
 POST        /auth/signin/credentials
 
 POST        /auth/signin/:providere
+
+GET			/test/token/random
