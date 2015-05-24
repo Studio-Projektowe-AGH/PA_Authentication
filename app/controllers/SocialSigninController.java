@@ -37,10 +37,14 @@ public class SocialSigninController extends Controller {
         try {
             JsonNode jsonBody = request().body().asJson();
             ObjectMapper mapper = new ObjectMapper();
+
             SocialCredentials receivedCredentials = mapper.readValue(jsonBody.toString(), SocialCredentials.class);
+            System.out.println(receivedCredentials);
 
             if (authenticationService.verifyCredentials(receivedCredentials)) {
+
                 if (!dataService.exists(new LoginCredentials(receivedCredentials))) {
+                    System.out.println("SocialCredentials");
                     LoginCredentials loginCredentials = facebookConnector.generateLoginCredentials(receivedCredentials);
                     dataService.save(loginCredentials);
                 }
